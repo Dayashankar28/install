@@ -1,0 +1,96 @@
+Step 1: Download and Install Prometheus
+      Update your system:
+
+sudo apt update && sudo apt upgrade -y
+
+Download Prometheus: Visit the Prometheus download page to get the latest version. Replace x.y.z with the desired version in the command below:
+
+wget https://github.com/prometheus/prometheus/releases/download/vx.y.z/prometheus-x.y.z.linux-amd64.tar.gz
+
+---->>> Extract the files:
+
+tar -xvf prometheus-x.y.z.linux-amd64.tar.gz
+cd prometheus-x.y.z.linux-amd64
+
+---->>> Move Prometheus binaries to /usr/local/bin:
+sudo mv prometheus /usr/local/bin/
+sudo mv promtool /usr/local/bin/
+
+---->>> Move configuration and library files:
+
+sudo mkdir /etc/prometheus
+sudo mv prometheus.yml /etc/prometheus/
+sudo mkdir -p /var/lib/prometheus
+
+
+---->>> Set permissions:
+
+sudo useradd -rs /bin/false prometheus
+sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
+
+Step 2: Create a Systemd Service File for Prometheus
+
+
+---->>> Create the service file:
+
+
+sudo vi /etc/systemd/system/prometheus.service
+
+
+---->>> Add the following configuration:
+
+
+[Unit]
+Description=Prometheus Monitoring System
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path=/var/lib/prometheus \
+  --web.console.templates=/etc/prometheus/consoles \
+  --web.console.libraries=/etc/prometheus/console_libraries
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+Save and close the file.
+
+  Step 3: Enable and Start Prometheus
+---->>> Reload systemd to register the service:
+
+sudo systemctl daemon-reload
+
+---->>> Start the Prometheus service:
+
+
+sudo systemctl start prometheus
+
+---->>> Enable auto-start on boot:
+
+
+sudo systemctl enable prometheus
+
+
+  Step 4: Verify Installation
+
+---->>> Check service status:
+
+
+sudo systemctl status prometheus
+You should see active (running).
+
+---->>> Test Prometheus: Open a web browser and navigate to:
+
+http://<your-server-ip>:9090
+---->>> Reboot the server to ensure it starts automatically:
+
+sudo reboot
+
+---->>> Check the status after reboot:
+
+sudo systemctl status prometheus
