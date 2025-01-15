@@ -35,3 +35,19 @@ sudo systemctl status jenkins --no-pager
 
 #run the below command to use this script in raw mode 
 # curl -s https://raw.githubusercontent.com/jaintpharsha/install/main/jenkins-master | sudo bash 
+
+#------------- PLUGINS -----
+# AWS CREDENTIALS
+# AWS STEPS
+# DOCKER
+# DOCKER PIPELINE
+# NODEJS
+# SONARQUBE Sanner
+# OWASP DEPENDENCY
+# ECLIPSE
+# MAVEN
+# MAVEN BUILD STEP
+# MAVEN INTEGRATION
+# KUBERNETES
+# KUBERNETES CLI
+# KUBERNETES CREDNETIALS
